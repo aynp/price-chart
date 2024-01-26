@@ -1,6 +1,6 @@
 mod routes;
 
-use axum::{routing::get, Router};
+use axum::{routing::{get, post}, Router};
 use sqlx::sqlite::SqlitePoolOptions;
 
 #[tokio::main]
@@ -17,6 +17,9 @@ async fn main() {
             "/historical-data",
             get(routes::historical_data::historical_data),
         )
+        .route("/portfolio/holdings", get(routes::portfolio::holdings))
+        .route("/user/profile", get(routes::user::profile))
+        .route("/order/place", post(routes::order::place_order))
         .with_state(pool);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
